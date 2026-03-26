@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from app.database import get_db
 from app.models.product import Product
-from app.services.scraper import AmazonScraper, EbayScraper, WalmartScraper
+from app.services.scraper import AmazonScraper
 
 router = APIRouter()
 
@@ -23,17 +23,10 @@ class ScrapeResponse(BaseModel):
 
 @router.post("/scrape", response_model=ScrapeResponse)
 async def scrape_products(request: ScrapeRequest, db: Session = Depends(get_db)):
-    scraper = None
+    if request.platform.lower() != "amazon":
+        raise HTTPException(status_code=400, detail="Currently only Amazon platform is supported")
     
-    if request.platform.lower() == "amazon":
-        scraper = AmazonScraper()
-    elif request.platform.lower() == "ebay":
-        scraper = EbayScraper()
-    elif request.platform.lower() == "walmart":
-        scraper = WalmartScraper()
-    else:
-        raise HTTPException(status_code=400, detail=f"Unsupported platform: {request.platform}")
-    
+    scraper = AmazonScraper()
     products = scraper.scrape(request.keyword, request.num_products)
     
     saved_products = []
@@ -67,8 +60,6 @@ async def scrape_products(request: ScrapeRequest, db: Session = Depends(get_db))
 def get_platforms():
     return {
         "platforms": [
-            {"name": "amazon", "label": "Amazon"},
-            {"name": "ebay", "label": "eBay"},
-            {"name": "walmart", "label": "Walmart"}
+            {"name": "amazon", "label": "Amazon"}
         ]
     }
