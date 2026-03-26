@@ -1,5 +1,0 @@
-{
-  "buildCommand": "cd frontend/comparecart && npm install && npm run build",
-  "outputDirectory": "frontend/comparecart/dist",
-  "framework": "vite"
-}
