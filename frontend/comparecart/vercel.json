@@ -1,5 +1,5 @@
 {
-  "installCommand": "pnpm install",
-  "buildCommand": "pnpm exec vite build",
+  "installCommand": "npm install --force",
+  "buildCommand": "npm run build",
   "outputDirectory": "dist"
 }
