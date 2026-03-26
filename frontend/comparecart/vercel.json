@@ -1,4 +1,5 @@
 {
-  "buildCommand": "npm install && npx vite build",
+  "installCommand": "pnpm install",
+  "buildCommand": "pnpm exec vite build",
   "outputDirectory": "dist"
 }
