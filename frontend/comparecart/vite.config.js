@@ -6,9 +6,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     proxy: {
-      '/api': process.env.VERCEL === '1' 
-        ? 'https://your-backend-url.vercel.app'
-        : 'http://localhost:8005'
+      '/api': 'https://compare-cart-263s.onrender.com'
     }
   }
 })
