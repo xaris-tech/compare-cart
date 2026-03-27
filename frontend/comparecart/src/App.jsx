@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './App.css'
 
+const API_BASE = import.meta.env.VITE_API_URL || 'https://compare-cart-263s.onrender.com'
+
 function App() {
   const [keyword, setKeyword] = useState('')
   const [platform, setPlatform] = useState('amazon')
@@ -13,6 +15,8 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [activeTab, setActiveTab] = useState('products')
 
+  const api = axios.create({ baseURL: API_BASE })
+
   useEffect(() => {
     loadProducts()
     loadComparisons()
@@ -20,7 +24,7 @@ function App() {
 
   const loadProducts = async () => {
     try {
-      const res = await axios.get('/api/products')
+      const res = await api.get('/api/products')
       setProducts(res.data)
     } catch (err) {
       console.error('Error loading products:', err)
@@ -29,7 +33,7 @@ function App() {
 
   const loadComparisons = async () => {
     try {
-      const res = await axios.get('/api/comparisons')
+      const res = await api.get('/api/comparisons')
       setComparisons(res.data)
     } catch (err) {
       console.error('Error loading comparisons:', err)
@@ -43,7 +47,7 @@ function App() {
     }
     setLoading(true)
     try {
-      const res = await axios.post('/api/scrape', {
+      const res = await api.post('/api/scrape', {
         keyword,
         platform,
         num_products: numProducts
@@ -74,7 +78,7 @@ function App() {
     }
     setLoading(true)
     try {
-      await axios.post('/api/comparisons', {
+      await api.post('/api/comparisons', {
         product_ids: selectedProducts.map(p => p.id),
         name: `Comparison ${new Date().toLocaleDateString()}`
       })
@@ -90,7 +94,7 @@ function App() {
 
   const handleDeleteComparison = async (id) => {
     try {
-      await axios.delete(`/api/comparisons/${id}`)
+      await api.delete(`/api/comparisons/${id}`)
       await loadComparisons()
     } catch (err) {
       alert('Error: ' + (err.response?.data?.detail || err.message))
@@ -104,7 +108,7 @@ function App() {
     }
     setLoading(true)
     try {
-      const res = await axios.post('/api/generate-marketing', {
+      const res = await api.post('/api/generate-marketing', {
         products
       })
       setMarketingPack(res.data.marketing_pack)
@@ -118,7 +122,7 @@ function App() {
 
   const handleClearProducts = async () => {
     try {
-      await axios.delete('/api/products')
+      await api.delete('/api/products')
       setProducts([])
       setSelectedProducts([])
       setMarketingPack(null)
