@@ -4,6 +4,7 @@ E-commerce product comparison tool that scrapes prices from multiple platforms (
 
 ![Dashboard Preview](docs/images/dashboard-preview.png)
 ![Comparison Page](docs/images/comparison-page.png)
+![Marketing Page](docs/images/marketing-page.png)
 
 ## Features
 
