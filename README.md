@@ -1,71 +1,105 @@
-# E-commerce Growth Agent 🚀
+# CompareCart 🛒
 
-Automated competitor monitoring and marketing content generation for Shopee & Lazada.
+E-commerce product comparison tool that scrapes prices from multiple platforms (Amazon, eBay, Walmart) and helps users find the best deals.
+
+![Dashboard Preview](docs/images/dashboard-preview.png)
+![Comparison Page](docs/images/comparison-page.png)
 
 ## Features
 
-- **Competitor Scraping**: Extract product data from Shopee and Lazada
-- **AI-Powered Marketing**: Generate SEO copy, ad headlines, keywords, and image prompts using Claude 3.5 Sonnet
-- **Dashboard**: Streamlit UI for easy input and output
-
-## Installation
-
-```bash
-# Create virtual environment
-python -m venv venv
-venv\Scripts\activate  # Windows
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-## Configuration
-
-1. Copy the example env file:
-```bash
-cp .env.example .env
-```
-
-2. Add your OpenRouter API key in `.env`:
-```
-OPENROUTER_API_KEY=your_key_here
-```
-Get free API key at https://openrouter.ai
-
-## Usage
-
-```bash
-streamlit run app.py
-```
-
-## How It Works
-
-1. **Input**: Enter a keyword (e.g., "wireless earbuds") and select platform
-2. **Scrape**: Agent extracts competitor products with prices, sales, ratings
-3. **Generate**: Claude AI analyzes the data and creates:
-   - SEO-optimized titles & descriptions
-   - Ad headlines for Google/Facebook/Instagram
-   - Keyword suggestions
-   - AI image generation prompts (Midjourney/DALL-E)
-4. **Download**: Export marketing pack as JSON
+- **Multi-platform Scraping**: Compare prices from Amazon, eBay, and Walmart
+- **Product Comparison**: View side-by-side price comparisons
+- **AI-Powered Insights**: Get product recommendations using Claude AI
+- **Modern UI**: Clean React frontend with real-time updates
 
 ## Project Structure
 
 ```
 .
-├── app.py                 # Streamlit dashboard
-├── config.py              # Configuration
-├── requirements.txt       # Dependencies
-├── scrapers/              # Web scrapers
-│   ├── shopee.py
-│   └── lazada.py
-├── agent/                 # Marketing AI agent
-│   └── marketing_agent.py
-└── outputs/               # Generated files
+├── frontend/                  # React + Vite frontend
+│   └── comparecart/
+├── backend/                   # FastAPI backend
+│   └── app/
+│       ├── routers/          # API endpoints
+│       ├── services/         # Business logic & scrapers
+│       ├── models/           # Database models
+│       └── schemas/          # Pydantic schemas
+└── docs/                     # Documentation
 ```
+
+## Setup
+
+### Prerequisites
+
+- Node.js 18+
+- Python 3.10+
+- Chrome browser (for scraping)
+
+### Backend Setup
+
+```bash
+cd backend
+
+# Create virtual environment
+python -m venv venv
+
+# Activate (Windows)
+venv\Scripts\activate
+# Or (Mac/Linux)
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Start server
+python -m uvicorn app.main:app --reload
+```
+
+The backend runs at `http://localhost:8000`
+
+### Frontend Setup
+
+```bash
+cd frontend/comparecart
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+The frontend runs at `http://localhost:5173`
+
+### Environment Variables
+
+Create a `.env` file in the `backend/` directory:
+
+```
+# Optional: For AI-powered insights
+OPENROUTER_API_KEY=your_key_here
+```
+
+Get a free API key at https://openrouter.ai
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/scrape` | Scrape products from a platform |
+| GET | `/api/products` | Get all stored products |
+| POST | `/api/comparison` | Compare products by keyword |
+
+## Usage
+
+1. Start the backend: `uvicorn app.main:app --reload`
+2. Start the frontend: `npm run dev`
+3. Open `http://localhost:5173` in your browser
+4. Enter a product keyword and select a platform to scrape
+5. View and compare results
 
 ## Notes
 
-- Without an API key, the agent uses mock data for demonstration
-- Scraping requires Chrome browser installed
+- Without an API key, the scraper works but AI features use mock data
 - Respect platform terms of service when scraping
+- Scraping may require Chrome browser installed
